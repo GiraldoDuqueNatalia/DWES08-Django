@@ -1,0 +1,78 @@
+
+
+{% extends "agenda/base.html" %}
+
+{% block title %}
+    {{ evento.titulo }} - Detalles
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+
+        <!-- Título del evento -->
+        <header class="text-center mb-5">
+            <h4 style="font-size: 2rem;">{{ evento.titulo }}</h4>
+        </header>
+
+        <!-- Contenedor principal con tres columnas -->
+        <div class="row">
+
+            <!-- Primera columna: Imagen del evento -->
+            <div class="col-md-3">
+                <img src="{{ evento.imagen.url }}" alt="{{ evento.titulo }}" style="max-height: 500px; object-fit: contain; width: 100%;">
+            </div>
+
+            <!-- Segunda columna: Detalles del evento -->
+            <div class="col-md-5">
+                <div class="card p-4 shadow-sm" style="font-size: 1.1rem;">
+                    <h4 class="mb-3">Detalles</h4>
+                    <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
+                    <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+                    <p><strong>Sala:</strong> {{ evento.sala.nombre }} (Capacidad: {{ evento.sala.capacidad }} personas)</p>
+                    <p><strong>Fecha(s):</strong></p>
+                    <ul>
+                        {% for fecha in evento.fechaevento_set.all %}
+                            <li>{{ fecha.fecha|date:"d/m/Y H:i" }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tercera columna: Formulario de reservas -->
+            <div class="col-md-4">
+                <div class="card p-4 shadow-sm border">
+                    <h4 class="mb-4">Reservar entradas</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Reservar</button>
+                    </form>
+
+                    <!-- Mensajes de éxito o error -->
+                    {% if messages %}
+                        <div class="mt-3">
+                            {% for message in messages %}
+                                {% if "¡Reserva efectuada correctamente!" in message %}
+                                    <div class="alert alert-success border shadow-sm p-3" style="background-color: #f8f9fa;">
+                                        <h5>Resumen de la reserva</h5>
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger shadow-sm">{{ message }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Botón para regresar a la programación -->
+        <a href="/agenda/" class="btn btn-secondary" style="display: block; margin-top: 20px;">
+            Volver a la programación
+        </a>
+
+    </div>
+{% endblock %}

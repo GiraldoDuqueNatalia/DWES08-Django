@@ -1,0 +1,52 @@
+{% extends "agenda/base.html" %}
+
+{% block title %}Teatro Gaudi - Programación{% endblock %}
+
+{% block content %}
+<div class="py-5">
+ 
+    <header class="text-center mb-5">
+
+        <h2 class="text-muted">Programación</h2>
+    </header>
+    
+    <!--tdos los eventos -->
+    <div class="row">
+        {% for evento in eventos %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <!-- Imagen del evento -->
+                <img src="{{ evento.imagen.url }}" class="card-img-top evento-img" alt="{{ evento.titulo }}" style="height: 450px; object-fit: contain;">
+                <div class="card-body">
+                  <!-- Muestra el tipo de evento (por ejemplo, Cine, Teatro, etc.) -->
+                    <h6 class="card-subtitle text-muted mb-2">{{ evento.tipo }}</h6>
+                   
+                    <h5 class="card-title">{{ evento.titulo }}</h5>
+                   
+                    <p class="card-text">
+                        <strong>Fecha(s):</strong> 
+                        <!-- for que recorrre las fechas del evento. con 'evento.fechaevento_set.all' se obtienen todas  y luego se da el formato  -->
+                        <ul>
+                            {% for fecha in evento.fechaevento_set.all %}
+                            <li>{{ fecha.fecha|date:"d/m/Y H:i" }}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                    <!-- Sala -->
+                    <p class="card-text">
+                        <strong>Sala:</strong> {{ evento.sala.nombre }}
+                    </p>
+                    <!-- Botón Más información que nos lleva a la otra template-->
+                    <a href="{{ evento.slug }}/" class="btn btn-primary">Más información</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
